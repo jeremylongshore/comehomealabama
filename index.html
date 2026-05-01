@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mandy Longshore · Realtor · Gulf Coast Alabama &amp; West Florida</title>
+  <meta name="description" content="Mandy Longshore — Realtor serving Gulf Shores, Orange Beach, Foley, Fairhope, Spanish Fort, Perdido Key, and West Pensacola. New site coming soon.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://comehomealabama.com/">
+  <meta property="og:title" content="Mandy Longshore · Realtor · Gulf Coast">
+  <meta property="og:description" content="Coastal Alabama and West Florida real estate. Site under construction.">
+  <meta property="og:url" content="https://comehomealabama.com/">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sand: #f5efe6;
+      --sand-deep: #ebe3d3;
+      --ink: #1c2530;
+      --ink-soft: #4b5763;
+      --gulf: #2d6a7a;
+      --gulf-deep: #1f4d59;
+      --sun: #c8a96a;
+      --line: #d8cdb8;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, system-ui, sans-serif;
+      background: var(--sand);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .bg {
+      position: fixed; inset: 0; z-index: -1;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(45,106,122,0.08), transparent 60%),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(200,169,106,0.10), transparent 60%),
+        var(--sand);
+    }
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+    .card {
+      max-width: 640px;
+      width: 100%;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gulf-deep);
+      background: rgba(255,255,255,0.5);
+      margin-bottom: 28px;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(40px, 7vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    h1 em {
+      font-style: italic;
+      color: var(--gulf-deep);
+    }
+    .tagline {
+      font-size: 17px;
+      color: var(--ink-soft);
+      margin-bottom: 40px;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: var(--sun);
+      margin: 0 auto 32px;
+    }
+    .meta {
+      font-size: 13px;
+      color: var(--ink-soft);
+      letter-spacing: 0.04em;
+    }
+    .meta strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .areas {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 14px;
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--gulf-deep);
+    }
+    .areas span {
+      padding: 4px 10px;
+      background: rgba(45,106,122,0.06);
+      border-radius: 4px;
+    }
+    .construction {
+      margin-top: 48px;
+      padding: 24px;
+      background: rgba(255,255,255,0.55);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--ink-soft);
+    }
+    .construction strong {
+      color: var(--gulf-deep);
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+    footer {
+      padding: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--ink-soft);
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,0.4);
+    }
+    footer a {
+      color: var(--gulf-deep);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--gulf);
+    }
+    footer a:hover { color: var(--gulf-deep); border-bottom-style: solid; }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <main>
+    <div class="card">
+      <span class="badge">Coastal Alabama · West Florida</span>
+      <h1>Mandy <em>Longshore</em></h1>
+      <div class="tagline">Realtor serving Gulf Shores, Orange Beach, Fairhope, Spanish Fort, Perdido Key, and West Pensacola.</div>
+      <div class="divider" aria-hidden="true"></div>
+      <div class="areas">
+        <span>Gulf Shores</span>
+        <span>Orange Beach</span>
+        <span>Foley</span>
+        <span>Fairhope</span>
+        <span>Spanish Fort</span>
+        <span>Perdido Key</span>
+        <span>Pensacola</span>
+      </div>
+      <div class="construction">
+        <strong>New site under construction</strong>
+        Search, market insights, and direct contact coming soon. Working with a buyer or seller now? Reach Mandy through her brokerage.
+      </div>
+    </div>
+  </main>
+  <footer>
+    &copy; 2026 Mandy Longshore · Built by <a href="https://intentsolutions.io">Intent Solutions</a>
+  </footer>
+</body>
+</html>
