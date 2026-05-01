@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Mandy Longshore · Realtor · Gulf Coast Alabama &amp; West Florida</title>
-  <meta name="description" content="Mandy Longshore — Realtor serving Gulf Shores, Orange Beach, Foley, Fairhope, Spanish Fort, Perdido Key, and West Pensacola. New site coming soon.">
+  <title>Mandy Longshore · Realtor · RE/MAX of Gulf Shores · Coastal Alabama &amp; West Florida</title>
+  <meta name="description" content="Mandy Longshore — Realtor with RE/MAX of Gulf Shores. Relocation, luxury, vacation, condominiums, and new construction across Gulf Shores, Orange Beach, Foley, Fairhope, Spanish Fort, Perdido Key, and West Pensacola.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://comehomealabama.com/">
-  <meta property="og:title" content="Mandy Longshore · Realtor · Gulf Coast">
-  <meta property="og:description" content="Coastal Alabama and West Florida real estate. Site under construction.">
+  <meta property="og:title" content="Mandy Longshore · Realtor · RE/MAX of Gulf Shores">
+  <meta property="og:description" content="Coastal Alabama and West Florida real estate. Relocation · Luxury · Vacation · Condominiums · New Construction.">
   <meta property="og:url" content="https://comehomealabama.com/">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,6 +37,8 @@
       flex-direction: column;
       min-height: 100vh;
     }
+    a { color: var(--gulf-deep); text-decoration: none; border-bottom: 1px dotted var(--gulf); transition: border-bottom-style .15s; }
+    a:hover { border-bottom-style: solid; }
     .bg {
       position: fixed; inset: 0; z-index: -1;
       background:
@@ -49,13 +51,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 48px 24px;
+      padding: 64px 24px 48px;
     }
-    .card {
-      max-width: 640px;
+    .wrap {
+      max-width: 720px;
       width: 100%;
-      text-align: center;
     }
+
+    /* ===== Hero ===== */
+    .hero { text-align: center; margin-bottom: 56px; }
     .badge {
       display: inline-block;
       padding: 6px 14px;
@@ -84,32 +88,29 @@
     .tagline {
       font-size: 17px;
       color: var(--ink-soft);
-      margin-bottom: 40px;
+      margin-bottom: 18px;
       max-width: 520px;
       margin-left: auto;
       margin-right: auto;
+    }
+    .brokerage {
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gulf-deep);
+      font-weight: 600;
     }
     .divider {
       width: 48px;
       height: 1px;
       background: var(--sun);
-      margin: 0 auto 32px;
-    }
-    .meta {
-      font-size: 13px;
-      color: var(--ink-soft);
-      letter-spacing: 0.04em;
-    }
-    .meta strong {
-      color: var(--ink);
-      font-weight: 600;
+      margin: 32px auto;
     }
     .areas {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 8px 14px;
-      margin-top: 18px;
       font-size: 13px;
       color: var(--gulf-deep);
     }
@@ -118,62 +119,173 @@
       background: rgba(45,106,122,0.06);
       border-radius: 4px;
     }
-    .construction {
-      margin-top: 48px;
-      padding: 24px;
-      background: rgba(255,255,255,0.55);
+
+    /* ===== Contact card ===== */
+    .contact-card {
+      background: rgba(255,255,255,0.7);
       border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 36px;
+      box-shadow: 0 1px 2px rgba(28,37,48,0.04);
+    }
+    .contact-card h2 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+    .contact-item .label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .contact-item .value {
+      font-size: 16px;
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    .contact-item .value a {
+      color: var(--ink);
+      border-bottom: 1px dotted var(--gulf);
+    }
+    .contact-item .value a:hover { color: var(--gulf-deep); border-bottom-style: solid; }
+
+    /* ===== Specialties ===== */
+    .specialties {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .specialties .label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+    .spec-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px 0;
+      font-size: 14px;
+      color: var(--gulf-deep);
+    }
+    .spec-row span {
+      padding: 0 14px;
+    }
+    .spec-row span + span {
+      border-left: 1px solid var(--line);
+    }
+
+    /* ===== Construction notice ===== */
+    .construction {
+      background: rgba(200,169,106,0.10);
+      border: 1px solid rgba(200,169,106,0.4);
       border-radius: 8px;
+      padding: 18px 22px;
       font-size: 14px;
       color: var(--ink-soft);
+      text-align: center;
     }
     .construction strong {
       color: var(--gulf-deep);
-      display: block;
-      margin-bottom: 6px;
-      font-size: 15px;
+      font-weight: 600;
     }
+
+    /* ===== Footer ===== */
     footer {
-      padding: 24px;
+      padding: 28px 24px;
       text-align: center;
       font-size: 12px;
       color: var(--ink-soft);
       border-top: 1px solid var(--line);
       background: rgba(255,255,255,0.4);
     }
-    footer a {
-      color: var(--gulf-deep);
-      text-decoration: none;
-      border-bottom: 1px dotted var(--gulf);
+    footer .meta {
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--ink-soft);
+      opacity: 0.8;
     }
-    footer a:hover { color: var(--gulf-deep); border-bottom-style: solid; }
   </style>
 </head>
 <body>
   <div class="bg" aria-hidden="true"></div>
   <main>
-    <div class="card">
-      <span class="badge">Coastal Alabama · West Florida</span>
-      <h1>Mandy <em>Longshore</em></h1>
-      <div class="tagline">Realtor serving Gulf Shores, Orange Beach, Fairhope, Spanish Fort, Perdido Key, and West Pensacola.</div>
-      <div class="divider" aria-hidden="true"></div>
-      <div class="areas">
-        <span>Gulf Shores</span>
-        <span>Orange Beach</span>
-        <span>Foley</span>
-        <span>Fairhope</span>
-        <span>Spanish Fort</span>
-        <span>Perdido Key</span>
-        <span>Pensacola</span>
-      </div>
+    <div class="wrap">
+
+      <section class="hero">
+        <span class="badge">Coastal Alabama · West Florida</span>
+        <h1>Mandy <em>Longshore</em></h1>
+        <div class="tagline">Realtor serving Gulf Shores, Orange Beach, Fairhope, Spanish Fort, Perdido Key, and West Pensacola.</div>
+        <div class="brokerage">RE/MAX of Gulf Shores</div>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <div class="areas">
+          <span>Gulf Shores</span>
+          <span>Orange Beach</span>
+          <span>Foley</span>
+          <span>Fairhope</span>
+          <span>Spanish Fort</span>
+          <span>Perdido Key</span>
+          <span>Pensacola</span>
+        </div>
+      </section>
+
+      <section class="contact-card" aria-label="Contact Mandy">
+        <h2>Get in touch</h2>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <div class="label">Direct</div>
+            <div class="value"><a href="tel:+12515975809">(251) 597-5809</a></div>
+          </div>
+          <div class="contact-item">
+            <div class="label">Office</div>
+            <div class="value"><a href="tel:+12512447612">(251) 244-7612</a></div>
+          </div>
+          <div class="contact-item">
+            <div class="label">RE/MAX of Gulf Shores</div>
+            <div class="value">1545 W 2nd St<br>Gulf Shores, AL 36542</div>
+          </div>
+          <div class="contact-item">
+            <div class="label">Listings &amp; Reviews</div>
+            <div class="value">
+              <a href="https://mandy-longshore.sellingcoastalal.com/" target="_blank" rel="noopener">View her listings</a><br>
+              <a href="https://reviews.birdeye.com/re-max-of-gulf-shores-mandy-longshore-156957454475669" target="_blank" rel="noopener">Read 5★ reviews</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="specialties" aria-label="Specialties">
+        <div class="label">Specialties</div>
+        <div class="spec-row">
+          <span>Relocation</span><span>Luxury</span><span>Vacation &amp; Resorts</span><span>Condominiums</span><span>New Construction</span>
+        </div>
+      </section>
+
       <div class="construction">
-        <strong>New site under construction</strong>
-        Search, market insights, and direct contact coming soon. Working with a buyer or seller now? Reach Mandy through her brokerage.
+        <strong>New site coming soon.</strong> Search, neighborhood guides, and market insights are on the way. In the meantime, give Mandy a call or text — she answers her phone.
       </div>
     </div>
   </main>
   <footer>
-    &copy; 2026 Mandy Longshore · Built by <a href="https://intentsolutions.io">Intent Solutions</a>
+    &copy; 2026 Mandy Longshore · Realtor® · RE/MAX of Gulf Shores<br>
+    <span style="font-size:11px; color: var(--ink-soft); opacity: 0.85;">AL License 000111-09400 · FL License SL3365422</span>
+    <div class="meta">Site by <a href="https://intentsolutions.io">Intent Solutions</a></div>
   </footer>
 </body>
 </html>
