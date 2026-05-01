@@ -1,0 +1,128 @@
+---
+import Layout from "@layouts/Layout.astro";
+
+const areas = [
+  "Gulf Shores",
+  "Orange Beach",
+  "Foley",
+  "Fairhope",
+  "Spanish Fort",
+  "Perdido Key",
+  "Pensacola",
+];
+
+const specialties = [
+  "Relocation",
+  "Luxury",
+  "Vacation & Resorts",
+  "Condominiums",
+  "New Construction",
+];
+---
+<Layout
+  title="Mandy Longshore · RE/MAX of Gulf Shores · Coastal Alabama & West Florida"
+  description="Mandy Longshore with RE/MAX of Gulf Shores. Proudly serving Gulf Shores, Orange Beach, Foley, Fairhope, Spanish Fort, Perdido Key, and West Pensacola — relocation, luxury, vacation, condominiums, and new construction."
+>
+  <section class="mx-auto max-w-3xl px-6 pt-16 pb-12 text-center md:pt-24">
+    <span class="border-line text-gulf-deep mb-7 inline-block rounded-full border bg-white/50 px-4 py-1.5 text-xs font-medium tracking-widest uppercase">
+      Coastal Alabama · West Florida
+    </span>
+    <h1 class="font-display text-ink text-[clamp(40px,7vw,64px)] leading-[1.05] font-medium tracking-tight">
+      Mandy <em class="text-gulf-deep">Longshore</em>
+    </h1>
+    <p class="text-ink-soft mx-auto mt-5 max-w-xl text-[17px]">
+      Proudly serving Gulf Shores, Orange Beach, Fairhope, Spanish Fort, Perdido Key, and West Pensacola.
+    </p>
+    <div class="text-gulf-deep mt-4 text-xs font-semibold tracking-widest uppercase">
+      RE/MAX of Gulf Shores
+    </div>
+
+    <div class="bg-sun mx-auto mt-8 h-px w-12" aria-hidden="true"></div>
+
+    <div class="text-gulf-deep mt-8 flex flex-wrap justify-center gap-x-3 gap-y-2 text-xs">
+      {areas.map((area) => (
+        <span class="bg-gulf/[0.06] rounded px-2.5 py-1">{area}</span>
+      ))}
+    </div>
+  </section>
+
+  <section
+    class="border-line mx-auto mb-9 max-w-3xl rounded-xl border bg-white/70 p-8 shadow-sm md:mx-auto md:max-w-3xl"
+    aria-label="Contact Mandy"
+  >
+    <h2 class="font-display text-ink mb-5 text-center text-2xl font-medium">
+      Get in touch
+    </h2>
+    <div class="grid gap-6 sm:grid-cols-2">
+      <div>
+        <div class="text-ink-soft text-[11px] font-semibold tracking-widest uppercase">
+          Direct
+        </div>
+        <a href="tel:+12515975809" class="text-ink hover:text-gulf-deep mt-1.5 block">
+          (251) 597-5809
+        </a>
+      </div>
+      <div>
+        <div class="text-ink-soft text-[11px] font-semibold tracking-widest uppercase">
+          Office
+        </div>
+        <a href="tel:+12512447612" class="text-ink hover:text-gulf-deep mt-1.5 block">
+          (251) 244-7612
+        </a>
+      </div>
+      <div>
+        <div class="text-ink-soft text-[11px] font-semibold tracking-widest uppercase">
+          RE/MAX of Gulf Shores
+        </div>
+        <p class="text-ink mt-1.5 leading-snug">
+          1545 W 2nd St
+          <br />
+          Gulf Shores, AL 36542
+        </p>
+      </div>
+      <div>
+        <div class="text-ink-soft text-[11px] font-semibold tracking-widest uppercase">
+          Listings & Reviews
+        </div>
+        <div class="mt-1.5 leading-snug">
+          <a
+            href="https://mandy-longshore.sellingcoastalal.com/"
+            target="_blank"
+            rel="noopener"
+            class="text-ink hover:text-gulf-deep block"
+          >
+            View her listings
+          </a>
+          <a
+            href="https://reviews.birdeye.com/re-max-of-gulf-shores-mandy-longshore-156957454475669"
+            target="_blank"
+            rel="noopener"
+            class="text-ink hover:text-gulf-deep mt-0.5 block"
+          >
+            Read 5★ reviews
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto mb-12 max-w-3xl px-6 text-center" aria-label="Specialties">
+    <div class="text-ink-soft mb-3.5 text-[11px] font-semibold tracking-widest uppercase">
+      Specialties
+    </div>
+    <div class="text-gulf-deep flex flex-wrap justify-center text-sm">
+      {specialties.map((spec, i) => (
+        <span class:list={["px-3.5", i > 0 && "border-line border-l"]}>
+          {spec}
+        </span>
+      ))}
+    </div>
+  </section>
+
+  <section class="mx-auto mb-16 max-w-3xl px-6">
+    <div class="bg-sun/10 border-sun/40 text-ink-soft rounded-lg border px-5 py-4 text-center text-sm">
+      <strong class="text-gulf-deep font-semibold">New site coming soon.</strong>{" "}
+      Search, neighborhood guides, and market insights are on the way. In the meantime, give Mandy a call or text — she answers her phone.
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,50 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { COMMUNITIES, type Community } from "@lib/communities";
+
+export async function getStaticPaths() {
+  return COMMUNITIES.map((c) => ({
+    params: { slug: c.slug },
+    props: { community: c },
+  }));
+}
+
+interface Props {
+  community: Community;
+}
+
+const { community } = Astro.props;
+---
+<Layout
+  title={`${community.name} · ${community.region} · Mandy Longshore`}
+  description={`${community.name} (${community.region}) neighborhood guide and listings — by Mandy Longshore, RE/MAX of Gulf Shores.`}
+>
+  <section class="mx-auto max-w-3xl px-6 pt-16 pb-20">
+    <a href="/communities/" class="text-ink-soft hover:text-gulf-deep text-sm">
+      ← All communities
+    </a>
+    <div class="text-gulf-deep mt-4 text-xs font-semibold tracking-widest uppercase">
+      {community.region}
+    </div>
+    <h1 class="font-display text-ink mt-2 text-[clamp(36px,5vw,52px)] leading-tight font-medium tracking-tight">
+      {community.name}
+    </h1>
+    <p class="text-ink-soft mt-4 text-lg">{community.tagline}</p>
+
+    {community.zips.length > 0 && (
+      <div class="mt-6 flex flex-wrap gap-2">
+        {community.zips.map((zip) => (
+          <span class="bg-gulf/[0.06] text-gulf-deep rounded px-2.5 py-1 font-mono text-xs">
+            {zip}
+          </span>
+        ))}
+      </div>
+    )}
+
+    <div class="text-ink-soft mt-12 space-y-5 text-base leading-relaxed">
+      <p>
+        Hyperlocal narrative, market snapshot, signature listings, and FAQ schema land in Phase B from Sanity (<code>community</code> schema, slug = <code>{community.slug}</code>).
+      </p>
+    </div>
+  </section>
+</Layout>
