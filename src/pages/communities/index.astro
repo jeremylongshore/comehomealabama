@@ -1,0 +1,37 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { COMMUNITIES } from "@lib/communities";
+---
+<Layout
+  title="Communities · Coastal Alabama & West Florida"
+  description="Neighborhood guides for Gulf Shores, Orange Beach, Foley, Fairhope, Spanish Fort, Perdido Key, and Pensacola — by Mandy Longshore, RE/MAX of Gulf Shores."
+>
+  <section class="mx-auto max-w-5xl px-6 pt-16 pb-20">
+    <span class="border-line text-gulf-deep mb-7 inline-block rounded-full border bg-white/50 px-4 py-1.5 text-xs font-medium tracking-widest uppercase">
+      Communities
+    </span>
+    <h1 class="font-display text-ink text-[clamp(36px,5vw,52px)] leading-tight font-medium tracking-tight">
+      The coast, town by town.
+    </h1>
+    <p class="text-ink-soft mt-5 max-w-2xl text-lg">
+      Phase B fills in hyperlocal copy, market data, and signature photography for each community. Phase A renders the slug routes so they're live and indexable.
+    </p>
+
+    <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {COMMUNITIES.map((c) => (
+        <a
+          href={`/communities/${c.slug}/`}
+          class="border-line group hover:border-gulf hover:bg-white/80 block rounded-xl border bg-white/50 p-6 transition-all"
+        >
+          <div class="text-ink-soft text-[11px] font-semibold tracking-widest uppercase">
+            {c.region}
+          </div>
+          <div class="font-display text-ink group-hover:text-gulf-deep mt-2 text-2xl font-medium transition-colors">
+            {c.name}
+          </div>
+          <p class="text-ink-soft mt-2 text-sm">{c.tagline}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,40 @@
+---
+import Layout from "@layouts/Layout.astro";
+
+const idxUrl = "https://mandy-longshore.sellingcoastalal.com/";
+---
+<Layout
+  title="Listings · Coastal Alabama & West Florida"
+  description="Search active listings across Gulf Shores, Orange Beach, Foley, Fairhope, Spanish Fort, Perdido Key, and Pensacola — Mandy Longshore, RE/MAX of Gulf Shores."
+>
+  <section class="mx-auto max-w-5xl px-6 pt-16 pb-10">
+    <span class="border-line text-gulf-deep mb-7 inline-block rounded-full border bg-white/50 px-4 py-1.5 text-xs font-medium tracking-widest uppercase">
+      Listings
+    </span>
+    <h1 class="font-display text-ink text-[clamp(36px,5vw,52px)] leading-tight font-medium tracking-tight">
+      Search active listings.
+    </h1>
+    <p class="text-ink-soft mt-5 max-w-2xl text-lg">
+      Phase A: live IDX feed via Mandy's brokerage portal. Phase C revisits native rendering if a JSON feed is available.
+    </p>
+  </section>
+
+  <section class="mx-auto mb-20 max-w-7xl px-2 sm:px-6">
+    <div class="border-line overflow-hidden rounded-xl border bg-white shadow-sm">
+      <iframe
+        src={idxUrl}
+        title="Mandy Longshore listings — sellingcoastalal.com IDX"
+        loading="lazy"
+        class="h-[80vh] w-full border-0"
+        allow="geolocation; fullscreen"
+      ></iframe>
+    </div>
+    <p class="text-ink-soft mt-3 px-2 text-center text-xs">
+      Listings provided by{" "}
+      <a href={idxUrl} target="_blank" rel="noopener" class="text-gulf-deep hover:underline">
+        sellingcoastalal.com
+      </a>
+      . Property data is updated continuously by the listing brokerage.
+    </p>
+  </section>
+</Layout>

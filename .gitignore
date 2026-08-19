@@ -3,3 +3,32 @@
 .dolt/
 *.db
 .beads-credential-key
+
+# Astro / Node build artifacts
+node_modules/
+dist/
+.astro/
+.output/
+.vercel/
+.netlify/
+.wrangler/
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Env / secrets — encrypted equivalents (.env.sops, *.sops.yaml) are tracked
+.env
+.env.local
+.env.production
+.env.development
+.dev.vars

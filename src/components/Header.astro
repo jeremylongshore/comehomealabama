@@ -1,0 +1,48 @@
+---
+const navItems: { href: string; label: string }[] = [
+  { href: "/about/", label: "About Mandy" },
+  { href: "/communities/", label: "Communities" },
+  { href: "/listings/", label: "Listings" },
+  { href: "/journal/", label: "Journal" },
+  { href: "/reviews/", label: "Reviews" },
+  { href: "/contact/", label: "Contact" },
+];
+
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href || path.startsWith(href);
+---
+<header class="border-line/60 border-b backdrop-blur-sm">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+    <a
+      href="/"
+      class="font-display text-gulf-deep text-2xl font-medium tracking-tight"
+    >
+      Mandy <em class="not-italic">Longshore</em>
+    </a>
+
+    <nav aria-label="Primary" class="hidden md:block">
+      <ul class="flex items-center gap-8 text-sm">
+        {navItems.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class:list={[
+                "text-ink-soft hover:text-gulf-deep transition-colors",
+                isActive(href) && "text-gulf-deep border-sun border-b border-dotted",
+              ]}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <a
+      href="tel:+12515975809"
+      class="bg-gulf-deep text-sand hover:bg-gulf inline-flex items-center rounded-full px-5 py-2 text-sm font-medium transition-colors"
+    >
+      (251) 597-5809
+    </a>
+  </div>
+</header>
