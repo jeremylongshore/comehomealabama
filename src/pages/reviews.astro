@@ -1,0 +1,31 @@
+---
+import Layout from "@layouts/Layout.astro";
+
+const birdeyeUrl =
+  "https://reviews.birdeye.com/re-max-of-gulf-shores-mandy-longshore-156957454475669";
+---
+<Layout
+  title="Reviews · Mandy Longshore"
+  description="Read verified reviews for Mandy Longshore at RE/MAX of Gulf Shores — coastal Alabama and west Florida real estate."
+>
+  <section class="mx-auto max-w-3xl px-6 pt-16 pb-12 text-center">
+    <span class="border-line text-gulf-deep mb-7 inline-block rounded-full border bg-white/50 px-4 py-1.5 text-xs font-medium tracking-widest uppercase">
+      Reviews
+    </span>
+    <h1 class="font-display text-ink text-[clamp(36px,5vw,52px)] leading-tight font-medium tracking-tight">
+      What Mandy's clients say.
+    </h1>
+    <p class="text-ink-soft mt-5 text-lg">
+      Phase B wires the Birdeye widget inline; Phase A links out so the social proof stays first-class.
+    </p>
+
+    <a
+      href={birdeyeUrl}
+      target="_blank"
+      rel="noopener"
+      class="bg-gulf-deep text-sand hover:bg-gulf mt-10 inline-flex items-center rounded-full px-6 py-3 text-sm font-medium transition-colors"
+    >
+      Read all 5★ reviews on Birdeye →
+    </a>
+  </section>
+</Layout>

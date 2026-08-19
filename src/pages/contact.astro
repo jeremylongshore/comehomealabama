@@ -1,0 +1,129 @@
+---
+import Layout from "@layouts/Layout.astro";
+---
+<Layout
+  title="Contact Mandy Longshore · RE/MAX of Gulf Shores"
+  description="Reach Mandy Longshore directly at (251) 597-5809 or send a message. Coastal Alabama and west Florida real estate."
+>
+  <section class="mx-auto max-w-2xl px-6 pt-16 pb-20">
+    <span class="border-line text-gulf-deep mb-7 inline-block rounded-full border bg-white/50 px-4 py-1.5 text-xs font-medium tracking-widest uppercase">
+      Contact
+    </span>
+    <h1 class="font-display text-ink text-[clamp(36px,5vw,52px)] leading-tight font-medium tracking-tight">
+      Get in touch.
+    </h1>
+    <p class="text-ink-soft mt-5 text-lg">
+      The fastest way is to call or text — Mandy answers her phone. The form below routes to her CRM and Slack.
+    </p>
+
+    <div class="mt-8 grid gap-4 sm:grid-cols-2">
+      <a
+        href="tel:+12515975809"
+        class="border-line bg-white/70 hover:border-gulf hover:bg-white block rounded-xl border p-5 transition-all"
+      >
+        <div class="text-ink-soft text-[11px] font-semibold tracking-widest uppercase">
+          Call or text
+        </div>
+        <div class="text-ink mt-1 text-lg font-medium">(251) 597-5809</div>
+      </a>
+      <a
+        href="mailto:mandy@remaxgs.com"
+        class="border-line bg-white/70 hover:border-gulf hover:bg-white block rounded-xl border p-5 transition-all"
+      >
+        <div class="text-ink-soft text-[11px] font-semibold tracking-widest uppercase">
+          Email
+        </div>
+        <div class="text-ink mt-1 text-lg font-medium">mandy@remaxgs.com</div>
+      </a>
+    </div>
+
+    <form
+      method="POST"
+      action="/api/lead"
+      class="border-line bg-white/70 mt-10 space-y-5 rounded-xl border p-7"
+    >
+      <div>
+        <label for="name" class="text-ink-soft block text-xs font-semibold tracking-widest uppercase">
+          Your name
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          class="border-line text-ink focus:border-gulf focus:ring-gulf/20 mt-2 block w-full rounded-md border bg-white px-3 py-2 text-base shadow-sm focus:ring-2 focus:outline-none"
+        />
+      </div>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="email" class="text-ink-soft block text-xs font-semibold tracking-widest uppercase">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="border-line text-ink focus:border-gulf focus:ring-gulf/20 mt-2 block w-full rounded-md border bg-white px-3 py-2 text-base shadow-sm focus:ring-2 focus:outline-none"
+          />
+        </div>
+        <div>
+          <label for="phone" class="text-ink-soft block text-xs font-semibold tracking-widest uppercase">
+            Phone (optional)
+          </label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            inputmode="tel"
+            class="border-line text-ink focus:border-gulf focus:ring-gulf/20 mt-2 block w-full rounded-md border bg-white px-3 py-2 text-base shadow-sm focus:ring-2 focus:outline-none"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="message" class="text-ink-soft block text-xs font-semibold tracking-widest uppercase">
+          What can I help you with?
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          rows="4"
+          required
+          class="border-line text-ink focus:border-gulf focus:ring-gulf/20 mt-2 block w-full rounded-md border bg-white px-3 py-2 text-base shadow-sm focus:ring-2 focus:outline-none"
+        ></textarea>
+      </div>
+
+      <fieldset class="border-line/60 rounded-md border p-4">
+        <legend class="text-ink-soft px-2 text-xs font-semibold tracking-widest uppercase">
+          Consent (TCPA)
+        </legend>
+        <label class="text-ink-soft flex items-start gap-3 text-sm">
+          <input
+            type="checkbox"
+            name="sms_consent"
+            value="yes"
+            class="border-line text-gulf focus:ring-gulf/30 mt-1 h-4 w-4 rounded"
+          />
+          <span>
+            I agree to receive SMS messages from Mandy Longshore at the phone number provided. Message and data rates may apply. Reply STOP to opt out at any time. Consent is not a condition of purchase.
+          </span>
+        </label>
+        <input type="hidden" name="consent_text_version" value="2026-04-30-v1" />
+        <input type="hidden" name="consent_source_url" value={Astro.url.toString()} />
+      </fieldset>
+
+      <button
+        type="submit"
+        class="bg-gulf-deep text-sand hover:bg-gulf inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-medium transition-colors"
+      >
+        Send message
+      </button>
+
+      <p class="text-ink-soft text-xs">
+        The form lands in Phase B — Cloudflare Pages Function at <code>/api/lead</code> writes to Twenty CRM and pings Slack. Until then submissions return a 404; please call or text.
+      </p>
+    </form>
+  </section>
+</Layout>
