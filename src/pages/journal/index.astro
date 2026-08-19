@@ -1,20 +1,64 @@
 ---
+import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
+import { COMMUNITIES } from "@lib/communities";
+
+const posts = (await getCollection("journal", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const communityName = (slug: string) =>
+  COMMUNITIES.find((c) => c.slug === slug)?.name ?? "The Coast";
+const formatDate = (d: Date) =>
+  d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 ---
 <Layout
   title="Journal · Mandy Longshore"
-  description="Notes from the coast — neighborhood updates, market observations, and recent stories from Mandy Longshore at RE/MAX of Gulf Shores."
-  noindex
+  description="Notes from the coast — neighborhood updates, market observations, land and ownership economics, and honest numbers from Mandy Longshore at RE/MAX of Gulf Shores."
 >
   <section class="mx-auto max-w-3xl px-6 pt-16 pb-20">
-    <span class="border-line text-gulf-deep mb-7 inline-block rounded-full border bg-white/50 px-4 py-1.5 text-xs font-medium tracking-widest uppercase">
+    <span
+      class="border-line text-gulf-deep mb-7 inline-block rounded-full border bg-white/50 px-4 py-1.5 text-xs font-medium tracking-widest uppercase"
+    >
       Journal
     </span>
-    <h1 class="font-display text-ink text-[clamp(36px,5vw,52px)] leading-tight font-medium tracking-tight">
+    <h1
+      class="font-display text-ink text-[clamp(36px,5vw,52px)] leading-tight font-medium tracking-tight"
+    >
       Notes from the coast.
     </h1>
     <p class="text-ink-soft mt-5 text-lg">
-      Optional Phase C: MDX-powered field journal — neighborhood updates, market color, recent stories. Currently <code>noindex</code> until first post lands.
+      Neighborhood updates, market color, land and ownership economics — the things
+      I'd tell you over coffee, written down. No pressure, just honest numbers.
     </p>
+
+    <div class="mt-12 space-y-10">
+      {posts.map((post) => (
+        <article class="border-line/60 border-b pb-10 last:border-b-0">
+          <div class="text-ink-soft flex items-center gap-3 text-xs font-medium tracking-widest uppercase">
+            <span class="text-gulf-deep">{communityName(post.data.community)}</span>
+            <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+          </div>
+          <h2 class="font-display mt-3 text-2xl font-medium tracking-tight">
+            <a href={`/journal/${post.id}/`} class="text-ink hover:text-gulf-deep transition-colors">
+              {post.data.title}
+            </a>
+          </h2>
+          <p class="text-ink-soft mt-3 text-base">{post.data.description}</p>
+          <a
+            href={`/journal/${post.id}/`}
+            class="text-gulf-deep mt-4 inline-block text-sm font-medium hover:underline"
+          >
+            Read the note →
+          </a>
+        </article>
+      ))}
+    </div>
+
+    {posts.length === 0 && (
+      <p class="text-ink-soft mt-12 text-base">
+        First notes are on the way. Call or text (251) 597-5809 in the meantime — I answer my phone.
+      </p>
+    )}
   </section>
 </Layout>

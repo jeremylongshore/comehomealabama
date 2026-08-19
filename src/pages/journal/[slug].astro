@@ -1,0 +1,71 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import { COMMUNITIES } from "@lib/communities";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("journal", ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const communityName =
+  COMMUNITIES.find((c) => c.slug === post.data.community)?.name ?? "The Coast";
+const formattedDate = post.data.date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+<Layout
+  title={`${post.data.title} · Journal · Mandy Longshore`}
+  description={post.data.description}
+  ogImage={post.data.ogImage}
+>
+  <article class="mx-auto max-w-3xl px-6 pt-16 pb-20">
+    <header>
+      <div class="flex items-center gap-3 text-xs font-medium tracking-widest uppercase">
+        <a
+          href="/journal/"
+          class="border-line text-gulf-deep rounded-full border bg-white/50 px-4 py-1.5 hover:bg-white/80"
+        >
+          Journal
+        </a>
+        <span class="text-ink-soft">{communityName}</span>
+      </div>
+      <h1
+        class="font-display text-ink mt-7 text-[clamp(32px,4.5vw,48px)] leading-tight font-medium tracking-tight"
+      >
+        {post.data.title}
+      </h1>
+      <p class="text-ink-soft mt-4 text-sm">
+        <time datetime={post.data.date.toISOString()}>{formattedDate}</time>
+        · Mandy Longshore, RE/MAX of Gulf Shores
+      </p>
+    </header>
+
+    <div
+      class="prose prose-lg mt-10 max-w-none prose-headings:font-display prose-headings:font-medium prose-headings:tracking-tight prose-headings:text-ink prose-p:text-ink-soft prose-li:text-ink-soft prose-strong:text-ink prose-a:text-gulf-deep"
+    >
+      <Content />
+    </div>
+
+    <footer class="border-line/60 mt-14 border-t pt-8">
+      <p class="text-ink text-base">
+        Thinking about a move on the coast? No pressure, just honest numbers.
+      </p>
+      <a
+        href="tel:+12515975809"
+        class="bg-gulf-deep text-sand hover:bg-gulf mt-4 inline-flex items-center rounded-full px-6 py-2.5 text-sm font-medium transition-colors"
+      >
+        Call or text (251) 597-5809
+      </a>
+      <p class="text-ink-soft mt-6 text-xs">
+        Mandy Longshore · RE/MAX of Gulf Shores · 1545 W 2nd St, Gulf Shores, AL 36542
+        · Licensed in Alabama & Florida
+      </p>
+    </footer>
+  </article>
+</Layout>
