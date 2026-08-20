@@ -5,8 +5,11 @@
 # this sweep emails the copy-paste packet only for posts landed >= STAGGER_HOURS
 # ago, so search engines see the canonical URL before any syndicated copy exists.
 #
+# Packets are BRANDED HTML rendered by mandy-packet-html.cjs (same layout
+# language as the startaitools Ezekiel packets, CHA palette) — never plain text.
+#
 # Modes:
-#   --sweep   (default) one packet email per due post → Ezekiel, CC Mandy/Jeremy.
+#   --sweep   (default) one packet email per due post.
 #             Ezekiel's sections: Substack, Medium (canonical!), ActiveRain,
 #             Nextdoor, Google Business Profile, Pinterest.
 #             Mandy's section: her own ready-to-paste LinkedIn + Facebook copy.
@@ -16,7 +19,8 @@
 # Recipients come from the PRIVATE config (never committed here):
 #   ~/000-projects/coastal-realty-ops/content-machine/packet.env
 #     PACKET_TO=...    PACKET_CC=...   (comma-separated CCs allowed)
-# Fallback: jeremy@intentsolutions.io only (safe until Ezekiel is briefed).
+# Fallback: jeremy@intentsolutions.io only. Nothing reaches Ezekiel until
+# Jeremy briefs him AND flips packet.env himself.
 #
 # State: ~/.local/state/mandy-journal/mandy-syndication-ledger.json
 # Deterministic — no LLM anywhere in this script.
@@ -46,21 +50,25 @@ PACKET_CC=""
 
 [ -f "$LEDGER" ] || { log "no ledger yet — nothing to do"; exit 0; }
 
-send_mail() { # subject body
-  local subject="$1" body="$2" rc=0
+send_mail_html() { # subject html_file
+  local subject="$1" html_file="$2" rc=0
   local -a cc_args=()
   if [ -n "$PACKET_CC" ]; then
     IFS=',' read -ra ccs <<< "$PACKET_CC"
     for c in "${ccs[@]}"; do cc_args+=(--cc "$c"); done
   fi
-  node "$EMAIL_SCRIPT" --to "$PACKET_TO" "${cc_args[@]}" --subject "$subject" --body "$body" || rc=$?
+  node "$EMAIL_SCRIPT" --to "$PACKET_TO" "${cc_args[@]}" --subject "$subject" --html "$html_file" || rc=$?
   return $rc
 }
 
-# Emit the full packet body for one slug (reads post + ledger row).
-build_packet() { # slug
-  python3 - "$1" "$REPO" "$LEDGER" <<'EOF'
-import json, re, sys, textwrap
+# Build the JSON payload for one slug and render the branded HTML packet.
+# Echoes the html file path.
+build_packet_html() { # slug
+  local slug="$1" payload html
+  payload="$LOG_DIR/packet-$slug.json"
+  html="$LOG_DIR/packet-$slug.html"
+  python3 - "$slug" "$REPO" "$LEDGER" > "$payload" <<'EOF'
+import json, re, sys
 slug, repo, ledger_path = sys.argv[1:4]
 row = next(p for p in json.load(open(ledger_path))["posts"] if p["slug"] == slug)
 raw = open(f"{repo}/src/content/journal/{slug}.mdx", encoding="utf-8").read()
@@ -69,92 +77,24 @@ fm, body = m.group(1), m.group(2).strip()
 def fmv(k, default=""):
     mm = re.search(rf'^{k}:\s*["\']?(.+?)["\']?\s*$', fm, re.M)
     return mm.group(1) if mm else default
-title, desc = fmv("title"), fmv("description")
 url = row["url"]
-def utm(source):
-    return f"{url}?utm_source={source}&utm_medium=syndication&utm_campaign=journal"
+utm = lambda s: f"{url}?utm_source={s}&utm_medium=syndication&utm_campaign=journal"
 first_para = next(p for p in body.split("\n\n") if not p.startswith("#")).replace("\n", " ")
-
-S = "=" * 72
-print(f"""POSTING PACKET — ComeHomeAlabama journal
-Post:      {title}
-Canonical: {url}
-Landed:    {row['landed_at'][:10]} (24h+ site-first stagger already satisfied)
-
-Order: work top to bottom. Every pasted version must LINK BACK to the
-canonical URL above (each section has its own tracking link — use that one).
-Voice: paste as-is. Do not add emojis, hashtags beyond what a section says,
-or any hype words. It should sound like Mandy, because it is.
-
-{S}
-1) SUBSTACK — "Notes from the Coast" (Ezekiel)
-{S}
-Title: {title}
-Paste the full post body below, then add this closing line:
-
-    Originally published on the journal: {utm("substack")}
-    No pressure, just honest numbers. Call or text Mandy: (251) 597-5809.
-
-{S}
-2) MEDIUM (Ezekiel) — IMPORTANT: set the canonical URL
-{S}
-Use Medium's import tool with the canonical URL, or paste the body and set
-Story settings → Advanced → canonical link to EXACTLY:
-    {url}
-Never publish on Medium without the canonical set. Tracking link for the
-closing line: {utm("medium")}
-
-{S}
-3) ACTIVERAIN (Ezekiel)
-{S}
-Title: {title}
-Paste the full body, then close with:
-
-    Full version on the journal: {utm("activerain")}
-    Mandy Longshore · RE/MAX of Gulf Shores · Licensed in AL & FL
-
-{S}
-4) NEXTDOOR (Ezekiel — Mandy's neighborhoods + business page)
-{S}
-{desc}
-
-Full note here: {utm("nextdoor")}
-Questions? Call or text Mandy: (251) 597-5809.
-
-{S}
-5) GOOGLE BUSINESS PROFILE post (Ezekiel — manual until Posts API approved)
-{S}
-{desc}
-[Add post → button "Learn more" → {utm("gbp")}]
-
-{S}
-6) PINTEREST pin (Ezekiel — board: matching community/pillar)
-{S}
-Pin title: {title}
-Pin description: {desc}
-Destination link: {utm("pinterest")}
-
-{S}
-7) MANDY'S SECTION — paste these yourself (LinkedIn + Facebook)
-{S}
-LINKEDIN:
-{first_para}
-
-I wrote the whole thing up here: {utm("linkedin")}
-
-FACEBOOK (page and/or groups per your call):
-{first_para}
-
-Full note: {utm("facebook")}
-Call or text me anytime: (251) 597-5809.
-
-{S}
-FULL POST BODY (for sections 1-3)
-{S}
-
-{body}
-""")
+json.dump({
+    "mode": "post",
+    "post_title": fmv("title"),
+    "description": fmv("description"),
+    "tier": fmv("tier", "T2"),
+    "date": row["date"],
+    "canonical_url": url,
+    "first_para": first_para,
+    "body_md": body,
+    "links": {s: utm(s) for s in
+              ["substack", "medium", "activerain", "nextdoor", "gbp", "pinterest", "linkedin", "facebook"]},
+}, sys.stdout)
 EOF
+  node "$REPO/scripts/journal/mandy-packet-html.cjs" --in "$payload" --out "$html" || return 1
+  echo "$html"
 }
 
 case "$MODE" in
@@ -175,9 +115,9 @@ EOF
   rc=0
   for slug in $due; do
     log "building packet for $slug"
-    body=$(build_packet "$slug") || { log "packet build failed for $slug"; rc=1; continue; }
+    html=$(build_packet_html "$slug") || { log "packet build failed for $slug"; rc=1; continue; }
     title=$(python3 -c "import json;print(next(p['title'] for p in json.load(open('$LEDGER'))['posts'] if p['slug']=='$slug'))")
-    if send_mail "Mandy journal posting packet: $title" "$body"; then
+    if send_mail_html "Mandy journal posting packet: $title" "$html"; then
       python3 - "$LEDGER" "$slug" <<'EOF'
 import json, sys, datetime
 ledger, slug = sys.argv[1:3]
@@ -198,30 +138,32 @@ EOF
   exit $rc
   ;;
 --digest)
-  digest=$(python3 - "$LEDGER" <<'EOF'
+  payload="$LOG_DIR/packet-digest.json"
+  html="$LOG_DIR/packet-digest.html"
+  python3 - "$LEDGER" > "$payload" <<'EOF'
 import json, sys, datetime
 data = json.load(open(sys.argv[1]))
 now = datetime.datetime.now().astimezone()
 week = [p for p in data["posts"]
         if (now - datetime.datetime.fromisoformat(p["landed_at"])).days < 7]
 if not week:
-    sys.exit(1)
-print("SUBSTACK WEEKLY DIGEST — paste as this week's 'Notes from the Coast'\n")
-print("Suggested subject: Notes from the coast, this week\n")
-print("Intro (paste as-is):")
-print("Here's what I wrote up this week. As always: no pressure, just honest numbers.\n")
-for p in week:
-    print(f"- {p['title']}")
-    print(f"  {p['url']}?utm_source=substack&utm_medium=digest&utm_campaign=journal\n")
-print("Closing: Call or text me anytime — (251) 597-5809. I answer my phone.")
-print("\n" + "=" * 72)
-print("GBP WEEK POST (one Google Business Profile post for the week):")
-p = week[0]
-print(f"New on the journal this week: {p['title']} — plus more honest numbers from the coast.")
-print(f"[Learn more → {p['url']}?utm_source=gbp&utm_medium=digest&utm_campaign=journal]")
+    sys.exit(3)
+u = lambda p, s, m: f"{p['url']}?utm_source={s}&utm_medium={m}&utm_campaign=journal"
+json.dump({
+    "mode": "digest",
+    "digest": {
+        "intro": "Here's what I wrote up this week. As always: no pressure, just honest numbers.",
+        "items": [{"title": p["title"], "url": u(p, "substack", "digest")} for p in week],
+        "gbp_text": (f"New on the journal this week: {week[0]['title']} — plus more honest "
+                     f"numbers from the coast.\n\nLearn more → {u(week[0], 'gbp', 'digest')}"),
+    },
+}, sys.stdout)
 EOF
-) || { log "no posts in the last 7 days — no digest"; exit 0; }
-  if send_mail "Mandy journal weekly digest packet (Substack + GBP)" "$digest"; then
+  prc=$?
+  [ "$prc" = "3" ] && { log "no posts in the last 7 days — no digest"; exit 0; }
+  [ "$prc" != "0" ] && { log "digest payload build failed"; exit 1; }
+  node "$REPO/scripts/journal/mandy-packet-html.cjs" --in "$payload" --out "$html" || { log "digest render failed"; exit 1; }
+  if send_mail_html "Mandy journal weekly digest packet (Substack + GBP)" "$html"; then
     log "digest packet sent"
     : > "$HOME/.local/state/intent-os/liveness/mandy-posting-packet.ok"
   else
