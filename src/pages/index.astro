@@ -12,11 +12,11 @@ const areas = [
 ];
 
 const specialties = [
-  "Relocation",
-  "Luxury",
-  "Vacation & Resorts",
-  "Condominiums",
-  "New Construction",
+  { label: "Relocation", href: "/specialties/relocation/" },
+  { label: "Luxury", href: "/specialties/luxury/" },
+  { label: "Vacation & Resorts", href: "/specialties/vacation-resorts/" },
+  { label: "Condominiums", href: "/specialties/condominiums/" },
+  { label: "New Construction", href: "/specialties/new-construction/" },
 ];
 ---
 <Layout
@@ -113,7 +113,7 @@ const specialties = [
     <div class="text-gulf-deep flex flex-wrap justify-center text-sm">
       {specialties.map((spec, i) => (
         <span class:list={["px-3.5", i > 0 && "border-line border-l"]}>
-          {spec}
+          <a href={spec.href} class="hover:text-gulf hover:underline">{spec.label}</a>
         </span>
       ))}
     </div>
@@ -121,8 +121,9 @@ const specialties = [
 
   <section class="mx-auto mb-16 max-w-3xl px-6">
     <div class="bg-sun/10 border-sun/40 text-ink-soft rounded-lg border px-5 py-4 text-center text-sm">
-      <strong class="text-gulf-deep font-semibold">New site coming soon.</strong>{" "}
-      Search, neighborhood guides, and market insights are on the way. In the meantime, give Mandy a call or text — she answers her phone.
+      <strong class="text-gulf-deep font-semibold">New on the site:</strong>{" "}
+      <a href="/journal/" class="text-gulf-deep font-medium hover:underline">the journal</a>{" "}
+      — neighborhood notes, land and ownership economics, honest numbers from the coast. Or skip the reading and call or text Mandy — she answers her phone.
     </div>
   </section>
 </Layout>
