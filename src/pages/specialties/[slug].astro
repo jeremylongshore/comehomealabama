@@ -1,0 +1,79 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { SPECIALTIES } from "@lib/specialties";
+
+export function getStaticPaths() {
+  return SPECIALTIES.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+}
+
+const { s } = Astro.props;
+---
+<Layout
+  title={`${s.name} · Mandy Longshore · RE/MAX of Gulf Shores`}
+  description={s.intro.slice(0, 190)}
+  ogImage={new URL(`/specialties/${s.slug}.jpg`, Astro.site).toString()}
+>
+  <section class="mx-auto max-w-5xl px-6 pt-10">
+    <div class="overflow-hidden rounded-2xl">
+      <img
+        src={`/specialties/${s.slug}.jpg`}
+        alt={s.heroAlt}
+        class="aspect-[21/9] w-full object-cover"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-3xl px-6 pt-12 pb-20">
+    <span class="border-line text-gulf-deep mb-7 inline-block rounded-full border bg-white/50 px-4 py-1.5 text-xs font-medium tracking-widest uppercase">
+      Specialty · {s.name}
+    </span>
+    <h1 class="font-display text-ink text-[clamp(34px,4.5vw,50px)] leading-tight font-medium tracking-tight">
+      {s.headline}
+    </h1>
+    <p class="text-ink-soft mt-6 text-lg">{s.intro}</p>
+
+    <div class="mt-12 space-y-10">
+      {s.sections.map((sec) => (
+        <div>
+          <h2 class="font-display text-ink text-2xl font-medium tracking-tight">
+            {sec.title}
+          </h2>
+          <p class="text-ink-soft mt-3 text-base">{sec.body}</p>
+        </div>
+      ))}
+    </div>
+
+    {s.related.length > 0 && (
+      <div class="border-line/60 mt-14 rounded-xl border bg-white/50 p-6">
+        <div class="text-ink-soft text-xs font-semibold tracking-widest uppercase">
+          From the journal
+        </div>
+        <ul class="mt-3 space-y-2">
+          {s.related.map((r) => (
+            <li>
+              <a href={r.href} class="text-gulf-deep text-base font-medium hover:underline">
+                {r.title} →
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <div class="border-line/60 mt-14 border-t pt-8">
+      <p class="text-ink text-base">
+        Ready to talk it through? No pressure, just honest numbers.
+      </p>
+      <a
+        href="tel:+12515975809"
+        class="bg-gulf-deep text-sand hover:bg-gulf mt-4 inline-flex items-center rounded-full px-6 py-2.5 text-sm font-medium transition-colors"
+      >
+        Call or text (251) 597-5809
+      </a>
+      <p class="text-ink-soft mt-6 text-xs">
+        Mandy Longshore · RE/MAX of Gulf Shores · Licensed in Alabama &amp; Florida
+      </p>
+    </div>
+  </section>
+</Layout>
