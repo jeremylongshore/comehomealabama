@@ -46,6 +46,12 @@ const ogImageUrl = ogImage ?? new URL("/og/default.png", Astro.site).toString();
     <meta name="twitter:image" content={ogImageUrl} />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title="Notes from the Coast" href="/rss.xml" />
+    <script
+      defer
+      src="https://analytics.intentsolutions.io/script.js"
+      data-website-id="477e4d7b-bd0f-43bb-9d6a-d9e27f7d83c8"
+    ></script>
     <slot name="head" />
   </head>
   <body class="bg-coastal-mesh flex min-h-screen flex-col">

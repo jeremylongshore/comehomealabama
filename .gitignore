@@ -26,6 +26,10 @@ yarn-error.log*
 !.vscode/extensions.json
 !.vscode/settings.json
 
+# Journal pipeline producer workspace (mandy-land.sh owns these)
+.journal-staging/
+.journal-quarantine/
+
 # Env / secrets — encrypted equivalents (.env.sops, *.sops.yaml) are tracked
 .env
 .env.local
