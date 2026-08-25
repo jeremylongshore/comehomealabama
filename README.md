@@ -12,6 +12,8 @@ Built by [Intent Solutions](https://intentsolutions.io).
 
 ---
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U5S225PTME)
+
 ## Local development
 
 ```bash
