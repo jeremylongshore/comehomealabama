@@ -48,7 +48,7 @@ PACKET_CC=""
 # shellcheck disable=SC1090
 [ -r "$PACKET_ENV" ] && source "$PACKET_ENV"
 
-[ -f "$LEDGER" ] || { log "no ledger yet — nothing to do"; exit 0; }
+[ -f "$LEDGER" ] || { log "no ledger yet — nothing to do"; : > "$HOME/.local/state/intent-os/liveness/mandy-posting-packet.ok"; exit 0; }
 
 send_mail_html() { # subject html_file
   local subject="$1" html_file="$2" rc=0
@@ -111,7 +111,9 @@ for p in json.load(open(ledger))["posts"]:
         print(p["slug"])
 EOF
 )
-  [ -z "$due" ] && { log "no packets due"; exit 0; }
+  # A quiet day is a SUCCESSFUL run — write .ok or the estate sweep reads
+  # fresh-beat + stale-ok as "running-but-failing" after two no-op days.
+  [ -z "$due" ] && { log "no packets due"; : > "$HOME/.local/state/intent-os/liveness/mandy-posting-packet.ok"; exit 0; }
   rc=0
   for slug in $due; do
     log "building packet for $slug"
@@ -160,7 +162,7 @@ json.dump({
 }, sys.stdout)
 EOF
   prc=$?
-  [ "$prc" = "3" ] && { log "no posts in the last 7 days — no digest"; exit 0; }
+  [ "$prc" = "3" ] && { log "no posts in the last 7 days — no digest"; : > "$HOME/.local/state/intent-os/liveness/mandy-posting-packet.ok"; exit 0; }
   [ "$prc" != "0" ] && { log "digest payload build failed"; exit 1; }
   node "$REPO/scripts/journal/mandy-packet-html.cjs" --in "$payload" --out "$html" || { log "digest render failed"; exit 1; }
   if send_mail_html "Mandy journal weekly digest packet (Substack + GBP)" "$html"; then
