@@ -1,5 +1,23 @@
 ---
 import Layout from "@layouts/Layout.astro";
+
+// The lead form posts to the Intent Solutions forms service, which hands the lead
+// to Mandy in a private channel. The service keeps the canonical consent text for
+// each version and rejects a submission whose text does not match, so a wording
+// change here must ship together with a new version on the service side
+// (intent-os ops/host/services/forms-api/mandy-lead.mjs, MANDY_CONSENT_VERSIONS).
+const LEAD_ENDPOINT = "https://intentsolutions.io/api/forms/mandy-lead";
+const BROKERAGE = "RE/MAX of Gulf Shores";
+const CONSENT_VERSION = "cha-contact-2026-10-v1";
+const CONSENT_TEXT =
+  `By checking this box, I agree that Mandy Longshore and her brokerage, ${BROKERAGE}, ` +
+  "may contact me about my real estate inquiry by phone call, text message or email " +
+  "at the phone number and email address I provided. Consent is not a condition of any " +
+  "purchase. Message and data rates may apply. Reply STOP to opt out of texts at any time.";
+
+const inputClass =
+  "border-line text-ink focus:border-gulf focus:ring-gulf/20 mt-2 block w-full rounded-md border bg-white px-3 py-2 text-base shadow-sm focus:ring-2 focus:outline-none";
+const labelClass = "text-ink-soft block text-xs font-semibold tracking-widest uppercase";
 ---
 <Layout
   title="Contact Mandy Longshore · RE/MAX of Gulf Shores"
@@ -13,7 +31,7 @@ import Layout from "@layouts/Layout.astro";
       Get in touch.
     </h1>
     <p class="text-ink-soft mt-5 text-lg">
-      The fastest way is to call or text — Mandy answers her phone. The form below routes to her CRM and Slack.
+      The fastest way is to call or text — Mandy answers her phone. The form below goes straight to Mandy.
     </p>
 
     <div class="mt-8 grid gap-4 sm:grid-cols-2">
@@ -37,93 +55,199 @@ import Layout from "@layouts/Layout.astro";
       </a>
     </div>
 
+    <div
+      id="lead-success"
+      class="border-line bg-white/70 mt-10 rounded-xl border p-7"
+      role="status"
+      aria-live="polite"
+      tabindex="-1"
+      hidden
+    >
+      <h2 class="font-display text-ink text-2xl font-medium">Thank you. Your message is with Mandy.</h2>
+      <p class="text-ink-soft mt-3">
+        Mandy will be in touch soon. If it is time-sensitive, call or text
+        <a class="text-gulf-deep underline" href="tel:+12515975809">(251) 597-5809</a>.
+      </p>
+    </div>
+
     <form
-      method="POST"
-      action="/api/lead"
+      id="lead-form"
+      method="post"
+      data-endpoint={LEAD_ENDPOINT}
+      data-consent-version={CONSENT_VERSION}
+      novalidate
       class="border-line bg-white/70 mt-10 space-y-5 rounded-xl border p-7"
     >
       <div>
-        <label for="name" class="text-ink-soft block text-xs font-semibold tracking-widest uppercase">
-          Your name
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          required
-          class="border-line text-ink focus:border-gulf focus:ring-gulf/20 mt-2 block w-full rounded-md border bg-white px-3 py-2 text-base shadow-sm focus:ring-2 focus:outline-none"
-        />
+        <label for="name" class={labelClass}>Your name</label>
+        <input type="text" id="name" name="name" required maxlength="120" autocomplete="name" class={inputClass} />
       </div>
 
       <div class="grid gap-5 sm:grid-cols-2">
         <div>
-          <label for="email" class="text-ink-soft block text-xs font-semibold tracking-widest uppercase">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            class="border-line text-ink focus:border-gulf focus:ring-gulf/20 mt-2 block w-full rounded-md border bg-white px-3 py-2 text-base shadow-sm focus:ring-2 focus:outline-none"
-          />
+          <label for="email" class={labelClass}>Email</label>
+          <input type="email" id="email" name="email" maxlength="254" autocomplete="email" class={inputClass} />
         </div>
         <div>
-          <label for="phone" class="text-ink-soft block text-xs font-semibold tracking-widest uppercase">
-            Phone (optional)
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            inputmode="tel"
-            class="border-line text-ink focus:border-gulf focus:ring-gulf/20 mt-2 block w-full rounded-md border bg-white px-3 py-2 text-base shadow-sm focus:ring-2 focus:outline-none"
-          />
+          <label for="phone" class={labelClass}>Phone</label>
+          <input type="tel" id="phone" name="phone" inputmode="tel" maxlength="40" autocomplete="tel" class={inputClass} />
+        </div>
+      </div>
+      <p class="text-ink-soft -mt-2 text-xs">An email or a phone number is required so Mandy can reply.</p>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="intent" class={labelClass}>I'm looking to</label>
+          <select id="intent" name="intent" required class={inputClass}>
+            <option value="" selected disabled>Choose one</option>
+            <option value="buy">Buy</option>
+            <option value="sell">Sell</option>
+            <option value="both">Buy and sell</option>
+            <option value="other">Something else</option>
+          </select>
+        </div>
+        <div>
+          <label for="propertyAddress" class={labelClass}>Property address (optional)</label>
+          <input type="text" id="propertyAddress" name="propertyAddress" maxlength="200" autocomplete="street-address" class={inputClass} />
         </div>
       </div>
 
       <div>
-        <label for="message" class="text-ink-soft block text-xs font-semibold tracking-widest uppercase">
-          What can I help you with?
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          rows="4"
-          required
-          class="border-line text-ink focus:border-gulf focus:ring-gulf/20 mt-2 block w-full rounded-md border bg-white px-3 py-2 text-base shadow-sm focus:ring-2 focus:outline-none"
-        ></textarea>
+        <label for="message" class={labelClass}>What can I help you with?</label>
+        <textarea id="message" name="message" rows="4" required maxlength="2000" class={inputClass}></textarea>
+      </div>
+
+      <div class="sr-only" aria-hidden="true">
+        <label for="website">Leave this field empty</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
       </div>
 
       <fieldset class="border-line/60 rounded-md border p-4">
         <legend class="text-ink-soft px-2 text-xs font-semibold tracking-widest uppercase">
-          Consent (TCPA)
+          Contact consent
         </legend>
         <label class="text-ink-soft flex items-start gap-3 text-sm">
           <input
             type="checkbox"
-            name="sms_consent"
-            value="yes"
-            class="border-line text-gulf focus:ring-gulf/30 mt-1 h-4 w-4 rounded"
+            id="consent"
+            name="consent"
+            required
+            class="border-line text-gulf focus:ring-gulf/30 mt-1 h-4 w-4 shrink-0 rounded"
           />
-          <span>
-            I agree to receive SMS messages from Mandy Longshore at the phone number provided. Message and data rates may apply. Reply STOP to opt out at any time. Consent is not a condition of purchase.
-          </span>
+          <span id="consent-text">{CONSENT_TEXT}</span>
         </label>
-        <input type="hidden" name="consent_text_version" value="2026-04-30-v1" />
-        <input type="hidden" name="consent_source_url" value={Astro.url.toString()} />
       </fieldset>
+
+      <p id="lead-error" class="rounded-md bg-red-50 p-3 text-sm text-red-800" role="alert" hidden></p>
 
       <button
         type="submit"
-        class="bg-gulf-deep text-sand hover:bg-gulf inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-medium transition-colors"
+        disabled
+        class="bg-gulf-deep text-sand hover:bg-gulf inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60"
       >
         Send message
       </button>
 
-      <p class="text-ink-soft text-xs">
-        The form lands in Phase B — Cloudflare Pages Function at <code>/api/lead</code> writes to Twenty CRM and pings Slack. Until then submissions return a 404; please call or text.
-      </p>
+      <noscript>
+        <p class="text-ink-soft text-xs">
+          This form needs JavaScript. Please call or text (251) 597-5809, or email mandy@remaxgs.com.
+        </p>
+      </noscript>
     </form>
   </section>
 </Layout>
+
+<script>
+  const FALLBACK = "Please call or text Mandy at (251) 597-5809, or email mandy@remaxgs.com.";
+
+  const form = document.getElementById("lead-form") as HTMLFormElement | null;
+  const success = document.getElementById("lead-success");
+  const errorBox = document.getElementById("lead-error");
+  const consentText = document.getElementById("consent-text");
+
+  if (form && success && errorBox && consentText) {
+    const button = form.querySelector<HTMLButtonElement>("button[type=submit]");
+    if (button) button.disabled = false;
+
+    const field = (name: string): string => {
+      const el = form.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | null;
+      return el ? el.value.trim() : "";
+    };
+    const showError = (message: string) => {
+      errorBox.textContent = message;
+      errorBox.hidden = false;
+    };
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      errorBox.hidden = true;
+
+      const consent = (form.elements.namedItem("consent") as HTMLInputElement).checked;
+      if (!field("name")) return showError("Please add your name.");
+      if (!field("email") && !field("phone")) return showError("Please add an email or a phone number so Mandy can reply.");
+      if (field("email") && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field("email"))) return showError("Please check the email address.");
+      if (!field("intent")) return showError("Please choose what you're looking to do.");
+      if (!field("message")) return showError("Please add a short message.");
+      if (!consent) return showError("Please check the consent box so Mandy can contact you.");
+
+      const body: Record<string, unknown> = {
+        name: field("name"),
+        message: field("message"),
+        intent: field("intent"),
+        page: window.location.pathname,
+        source: "website",
+        consent: true,
+        consentVersion: form.dataset.consentVersion,
+        consentText: (consentText.textContent || "").replace(/\s+/g, " ").trim(),
+      };
+      for (const optional of ["email", "phone", "propertyAddress", "website"]) {
+        if (field(optional)) body[optional] = field(optional);
+      }
+
+      if (button) {
+        button.disabled = true;
+        button.textContent = "Sending…";
+      }
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), 30_000);
+      try {
+        // text/plain keeps this a simple CORS request; the service parses the JSON body.
+        const response = await fetch(form.dataset.endpoint || "", {
+          method: "POST",
+          headers: { "content-type": "text/plain;charset=UTF-8" },
+          body: JSON.stringify(body),
+          signal: controller.signal,
+        });
+        if (response.ok) {
+          form.hidden = true;
+          success.hidden = false;
+          success.focus();
+          return;
+        }
+        let detail = "";
+        try {
+          detail = ((await response.json()) as { error?: string }).error || "";
+        } catch {
+          detail = "";
+        }
+        if (response.status === 400 && /out of date/.test(detail)) {
+          showError(`This page is out of date. Please reload it and try again, or: ${FALLBACK}`);
+        } else if (response.status === 400 && detail) {
+          showError(`Please check the form (${detail}). ${FALLBACK}`);
+        } else if (response.status === 429) {
+          showError(`Too many messages from this connection. ${FALLBACK}`);
+        } else {
+          showError(`The message could not be sent. ${FALLBACK}`);
+        }
+      } catch {
+        showError(`The message could not be sent. ${FALLBACK}`);
+      } finally {
+        window.clearTimeout(timer);
+        if (button && !form.hidden) {
+          button.disabled = false;
+          button.textContent = "Send message";
+        }
+      }
+    });
+  }
+</script>
